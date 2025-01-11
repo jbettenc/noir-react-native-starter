@@ -70,6 +70,18 @@ export default function Home() {
             Proof of secp256r1
           </Text>
         </Button>
+        <Button
+          onPress={() => {
+            navigation.navigate('PassportProof');
+          }}>
+          <Text
+            style={{
+              color: 'white',
+              fontWeight: '700',
+            }}>
+            Proof of passport
+          </Text>
+        </Button>
       </View>
     </MainLayout>
   );
