@@ -125,13 +125,13 @@ export default function PassportProof() {
         sampleObject,
         circuitId!,
       );
-      //   const end = Date.now();
-      //   setProvingTime(end - start);
-      //   setProofAndInputs(proofWithPublicInputs);
-      //   setProof(
-      //     extractProof(circuit as unknown as Circuit, proofWithPublicInputs),
-      //   );
-      //   setVkey(_vkey);
+      const end = Date.now();
+      setProvingTime(end - start);
+      setProofAndInputs(proofWithPublicInputs);
+      setProof(
+        extractProof(circuit as unknown as Circuit, proofWithPublicInputs),
+      );
+      setVkey(_vkey);
     } catch (err: any) {
       Alert.alert('Something went wrong', JSON.stringify(err));
       console.error(err);
