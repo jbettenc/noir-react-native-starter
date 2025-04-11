@@ -8,6 +8,7 @@ import ProductProof from './pages/product-proof';
 import PedersenProof from './pages/pedersen-proof';
 import PassportProof from './pages/passport-proof';
 import Secp256r1Proof from './pages/secp256r1-proof';
+import './shim';
 
 const Stack = createNativeStackNavigator();
 
