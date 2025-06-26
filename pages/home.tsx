@@ -72,6 +72,18 @@ export default function Home() {
         </Button>
         <Button
           onPress={() => {
+            navigation.navigate('PassportProofSig');
+          }}>
+          <Text
+            style={{
+              color: 'white',
+              fontWeight: '700',
+            }}>
+            Proof of passport (w/signature)
+          </Text>
+        </Button>
+        <Button
+          onPress={() => {
             navigation.navigate('PassportProof');
           }}>
           <Text
@@ -79,7 +91,7 @@ export default function Home() {
               color: 'white',
               fontWeight: '700',
             }}>
-            Proof of passport
+            Proof of passport (integrity)
           </Text>
         </Button>
       </View>

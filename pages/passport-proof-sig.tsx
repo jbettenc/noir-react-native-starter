@@ -12,7 +12,7 @@ import {
 } from '../lib/noir';
 // Get the circuit to load for the proof generation
 // Feel free to replace this with your own circuit
-import circuit from '../circuits/passport/integrity.json';
+import circuit from '../circuits/passport/integrity_sig.json';
 import {formatProof} from '../lib';
 import {Circuit} from '../types';
 import {hash, publicKeyByPrivateKey} from 'eth-crypto';
@@ -243,6 +243,10 @@ export default function PassportProof() {
       e_content: e_content.map(i => i8ToU8(i)),
       e_content_size,
       dg1_offset_in_e_content,
+      pub_key_x: Array.from(Uint8Array.from(pub_key_x)),
+      pub_key_y: Array.from(Uint8Array.from(pub_key_y)),
+      document_number_hash: document_number_hash.toJSON().data,
+      signature: signature.toJSON().data,
     };
   };
 
@@ -299,7 +303,7 @@ export default function PassportProof() {
           textAlign: 'center',
           color: '#6B7280',
         }}>
-        Generate a proof for sample passport data (integrity only)
+        Generate a proof for sample passport data (integrity + sig)
       </Text>
       {proof && (
         <>
