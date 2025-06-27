@@ -258,10 +258,13 @@ export default function PassportProof() {
         circuitId!,
       );
       // Pull the return values from the circuit
-      const publicInputs = extractRawPublicInputs(
+      let publicInputs = extractRawPublicInputs(
         circuit as unknown as Circuit,
         proofWithPublicInputs,
       );
+      const valid = Boolean(Number(publicInputs[publicInputs.length - 1]));
+      console.log(valid);
+      publicInputs = publicInputs.slice(0, publicInputs.length - 64);
       // Turn return values into a readable document number
       const publicInputsString = String.fromCharCode(
         ...(publicInputs.match(new RegExp(`.{1,${64}}`, 'g')) || []).map(x =>
