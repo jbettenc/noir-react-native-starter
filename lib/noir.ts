@@ -1,5 +1,5 @@
 import {NativeModules, Platform} from 'react-native';
-import {Circuit, Parameter, ParameterType} from '../types';
+import {Circuit, Parameter, ParameterType, Output} from '../types';
 const {NoirModule} = NativeModules;
 
 /**
@@ -40,7 +40,7 @@ function computeInputArraySize(type: ParameterType) {
   if (type.type && type.type.kind === 'array') {
     count += (type.length || 0) * computeInputArraySize(type.type);
   } else {
-    count += type.length || 0;
+    count += type.length || type.width || 0;
   }
   return count;
 }
@@ -64,9 +64,31 @@ function computePublicInputsSize(params: Parameter[]) {
   return fieldCount;
 }
 
+function computeReturnOutputSize(output: Output) {
+  let fieldCount = 0;
+  if (output.visibility === 'public') {
+    if (output.abi_type.kind === 'array') {
+      fieldCount += computeInputArraySize(output.abi_type);
+    } else if (output.abi_type.kind === 'string') {
+      fieldCount += output.abi_type.length || 0;
+    } else if (output.abi_type.kind === 'struct') {
+      fieldCount += computePublicInputsSize(output.abi_type.fields!);
+    } else {
+      fieldCount += 1;
+    }
+  }
+
+  return fieldCount;
+}
+
 function getLastIndexOfPublicInputs(circuit: Circuit) {
   // Each field is encoded as a hexadecimal string of 64 characters (i.e. 32 bytes)
-  return 64 * 3 + 8 + computePublicInputsSize(circuit.abi.parameters) * 64;
+  return (
+    64 * 3 +
+    8 +
+    computePublicInputsSize(circuit.abi.parameters) * 64 +
+    computeReturnOutputSize(circuit.abi.return_type) * 64
+  );
 }
 
 /**

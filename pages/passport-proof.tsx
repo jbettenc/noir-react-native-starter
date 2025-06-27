@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import {
   clearCircuit,
   extractProof,
+  extractRawPublicInputs,
   generateProof,
   setupCircuit,
   verifyProof,
@@ -256,6 +257,18 @@ export default function PassportProof() {
         await generateInputFromPassport(passport, '20241228'),
         circuitId!,
       );
+      // Pull the return values from the circuit
+      const publicInputs = extractRawPublicInputs(
+        circuit as unknown as Circuit,
+        proofWithPublicInputs,
+      );
+      // Turn return values into a readable document number
+      const publicInputsString = String.fromCharCode(
+        ...(publicInputs.match(new RegExp(`.{1,${64}}`, 'g')) || []).map(x =>
+          parseInt(x, 16),
+        ),
+      );
+      console.log(publicInputsString);
       const end = Date.now();
       console.log(proofWithPublicInputs);
       setProvingTime(end - start);

@@ -3,6 +3,7 @@ export type ParameterKind = 'string' | 'array' | 'struct' | 'field' | 'integer';
 export type ParameterType = {
   kind: ParameterKind;
   length?: number;
+  width?: number;
   type?: ParameterType;
   fields?: Parameter[];
 };
@@ -10,6 +11,11 @@ export type ParameterType = {
 export type Parameter = {
   name: string;
   type: ParameterType;
+  visibility: 'private' | 'public';
+};
+
+export type Output = {
+  abi_type: ParameterType;
   visibility: 'private' | 'public';
 };
 
