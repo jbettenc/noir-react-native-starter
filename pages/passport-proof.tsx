@@ -271,7 +271,9 @@ export default function PassportProof() {
           parseInt(x, 16),
         ),
       );
-      console.log(publicInputsString);
+      const countryCode = publicInputsString.substring(0, 3);
+      const documentNumber = publicInputsString.substring(3);
+      console.log(countryCode, documentNumber);
       const end = Date.now();
       console.log(proofWithPublicInputs);
       setProvingTime(end - start);
