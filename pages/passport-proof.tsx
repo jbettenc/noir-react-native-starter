@@ -21,6 +21,13 @@ import {ethers, Wallet} from 'ethers';
 import {sign} from 'eth-crypto';
 // import {PRIVATE_KEY} from '@env';
 
+// const passport = {
+//   mrz: 'POCHNYAN<<XIN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\nEL88047112CHN9512036M3402063ODMGNAMA<<<<A916\n',
+//   eContent:
+//     '[49,93,48,24,6,9,42,134,72,134,247,13,1,9,3,49,11,6,9,42,134,72,134,247,13,1,7,1,48,28,6,9,42,134,72,134,247,13,1,9,5,49,15,23,13,50,52,48,50,48,55,48,54,50,56,50,50,90,48,35,6,9,42,134,72,134,247,13,1,9,4,49,22,4,20,70,112,92,44,59,76,203,252,23,191,158,102,190,45,238,67,135,154,139,82]',
+//   encapContent:
+//     '[48,-127,-40,2,1,0,48,13,6,9,96,-122,72,1,101,3,4,2,1,5,0,48,-127,-61,48,37,2,1,1,4,32,27,43,-71,-100,75,-59,2,4,96,68,-54,123,-71,-73,-96,-99,90,67,-119,-34,-126,31,93,-40,92,106,13,-123,-23,-96,-118,-89,48,37,2,1,2,4,32,-4,74,41,51,50,-32,37,21,17,39,-22,-58,6,-88,27,18,79,-121,100,-30,-91,-83,-67,-39,-83,-12,-78,64,-116,58,49,-53,48,37,2,1,11,4,32,16,-72,21,-87,106,-14,-51,45,-25,-82,88,51,-92,47,-9,-51,25,98,-36,126,-124,119,-67,93,7,-15,28,58,5,-81,107,-22,48,37,2,1,12,4,32,-82,75,-70,1,91,57,29,-8,-98,-29,54,92,-116,24,79,-4,-7,-69,126,-126,90,48,7,123,115,-121,114,120,-105,78,122,40,48,37,2,1,15,4,32,-64,-16,-103,67,34,-28,78,32,97,-21,-128,16,75,-103,-93,-67,-112,34,3,-128,-62,6,22,-120,97,-7,45,84,33,-121,9,17]',
+// };
 const passport = {
   unicodeVersion: 'null',
   encapContent:
@@ -193,27 +200,6 @@ export default function PassportProof() {
       95,
     );
 
-    let document_number = Buffer.from('EA4606318');
-    let docNumberPadding = Buffer.from([
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ]); // 23 0s
-    let padded_document_number = Buffer.concat([
-      docNumberPadding,
-      document_number,
-    ]);
-    let doc_hash = hash.keccak256(padded_document_number.toString());
-    let document_number_hash = Buffer.from(doc_hash.slice(2), 'hex');
-
-    let wallet = new Wallet(process.env.PRIVATE_KEY ?? '');
-    let decompressedPublicKey = publicKeyByPrivateKey(wallet.privateKey);
-    let x = decompressedPublicKey.slice(0, 64);
-    let y = decompressedPublicKey.slice(64);
-    let pub_key_x = Buffer.from(x, 'hex');
-    let pub_key_y = Buffer.from(y, 'hex');
-
-    let sig = sign(wallet.privateKey, padded_document_number.toString('hex'));
-    let signature = Buffer.from(sig.slice(2), 'hex').slice(0, 64);
-
     let eContent = JSON.parse(passport.eContent); // number array
     let signed_attributes = padArrayWithZeros(
       Buffer.from(eContent).toJSON().data,
@@ -254,16 +240,20 @@ export default function PassportProof() {
       // await preloadCircuit(circuit);
       const start = Date.now();
       const {proofWithPublicInputs, vkey: _vkey} = await generateProof(
-        await generateInputFromPassport(passport, '20241228'),
+        await generateInputFromPassport(passport, '20250711'),
         circuitId!,
       );
+      console.log(await generateInputFromPassport(passport, '20250711'));
       // Pull the return values from the circuit
       let publicInputs = extractRawPublicInputs(
         circuit as unknown as Circuit,
         proofWithPublicInputs,
       );
+      //   let proofWithoutPublicInputs =
+      //     proofWithPublicInputs.slice(0, 8) +
+      //     extractProof(circuit as unknown as Circuit, proofWithPublicInputs);
+
       const valid = Boolean(Number(publicInputs[publicInputs.length - 1]));
-      console.log(valid);
       publicInputs = publicInputs.slice(0, publicInputs.length - 64);
       // Turn return values into a readable document number
       const publicInputsString = String.fromCharCode(
@@ -271,9 +261,13 @@ export default function PassportProof() {
           parseInt(x, 16),
         ),
       );
-      const countryCode = publicInputsString.substring(0, 3);
-      const documentNumber = publicInputsString.substring(3);
+      const dg1HashAlg = publicInputsString.substring(0, 6);
+      const signedAttrHashAlg = publicInputsString.substring(6, 12);
+      const countryCode = publicInputsString.substring(12, 15);
+      const documentNumber = publicInputsString.substring(15);
+      console.log(dg1HashAlg, signedAttrHashAlg);
       console.log(countryCode, documentNumber);
+      console.log(valid);
       const end = Date.now();
       console.log(proofWithPublicInputs);
       setProvingTime(end - start);
