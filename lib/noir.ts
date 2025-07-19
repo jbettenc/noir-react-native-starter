@@ -82,8 +82,6 @@ function computeReturnOutputSize(output: Output) {
 function getLastIndexOfPublicInputs(circuit: Circuit) {
   // Each field is encoded as a hexadecimal string of 64 characters (i.e. 32 bytes)
   return (
-    64 * 3 +
-    8 +
     computePublicInputsSize(circuit.abi.parameters) * 64 +
     computeReturnOutputSize(circuit.abi.return_type) * 64
   );
@@ -102,7 +100,7 @@ export function extractRawPublicInputs(
   proofWithPublicInputs: string,
 ) {
   const lastIndex = getLastIndexOfPublicInputs(circuit);
-  return proofWithPublicInputs.slice(64 * 3 + 8, lastIndex);
+  return proofWithPublicInputs.slice(0, lastIndex);
 }
 
 /**
@@ -117,7 +115,7 @@ export function extractRawPublicInputs(
 export function extractProof(circuit: Circuit, proofWithPublicInputs: string) {
   const lastIndex = getLastIndexOfPublicInputs(circuit);
   return (
-    proofWithPublicInputs.slice(8, 8 + 64 * 3) +
+    // proofWithPublicInputs.slice(8, 8 + 64 * 3) +
     proofWithPublicInputs.slice(lastIndex)
   );
 }
