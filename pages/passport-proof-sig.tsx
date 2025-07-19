@@ -129,7 +129,6 @@ const sampleObject = {
 export default function PassportProof() {
   const [proofAndInputs, setProofAndInputs] = useState('');
   const [proof, setProof] = useState('');
-  const [vkey, setVkey] = useState('');
   const [generatingProof, setGeneratingProof] = useState(false);
   const [verifyingProof, setVerifyingProof] = useState(false);
   const [provingTime, setProvingTime] = useState(0);
@@ -256,7 +255,7 @@ export default function PassportProof() {
       // You can also preload the circuit separately using this function
       // await preloadCircuit(circuit);
       const start = Date.now();
-      const {proofWithPublicInputs, vkey: _vkey} = await generateProof(
+      const {proofWithPublicInputs} = await generateProof(
         await generateInputFromPassport(passport, '20241228'),
         circuitId!,
       );
@@ -267,7 +266,6 @@ export default function PassportProof() {
       setProof(
         extractProof(circuit as unknown as Circuit, proofWithPublicInputs),
       );
-      setVkey(_vkey);
     } catch (err: any) {
       Alert.alert('Something went wrong', JSON.stringify(err));
       console.error(err);
@@ -280,7 +278,7 @@ export default function PassportProof() {
     try {
       // No need to provide the circuit here, as it was already loaded
       // during the proof generation
-      const verified = await verifyProof(proofAndInputs, vkey, circuitId!);
+      const verified = await verifyProof(proofAndInputs, circuitId!);
       if (verified) {
         Alert.alert('Verification result', 'The proof is valid!');
       } else {
