@@ -559,7 +559,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YL5MS3Z639;
+				DEVELOPMENT_TEAM = F968RGF4JG;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NoirReactNative/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Noir React Native";
@@ -575,7 +575,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.noirreactnative.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noirreactnativetest.app;
 				PRODUCT_NAME = NoirReactNative;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -600,7 +600,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YL5MS3Z639;
+				DEVELOPMENT_TEAM = F968RGF4JG;
 				INFOPLIST_FILE = NoirReactNative/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Noir React Native";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -615,7 +615,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.noirreactnative.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noirreactnativetest.app;
 				PRODUCT_NAME = NoirReactNative;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -706,6 +706,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				USE_HERMES = true;
 			};
 			name = Debug;
