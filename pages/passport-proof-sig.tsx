@@ -7,6 +7,7 @@ import {
   clearCircuit,
   extractProof,
   generateProof,
+  generateVkey,
   setupCircuit,
   verifyProof,
 } from '../lib/noir';
@@ -254,10 +255,14 @@ export default function PassportProof() {
     try {
       // You can also preload the circuit separately using this function
       // await preloadCircuit(circuit);
+      // Ideally for better performance, you should precompute the vkey
+      // outside the app, since it's going to be the same for the same circuit every time
+      const vkey = await generateVkey(circuitId!);
       const start = Date.now();
       const {proofWithPublicInputs} = await generateProof(
         await generateInputFromPassport(passport, '20241228'),
         circuitId!,
+        vkey,
       );
       const end = Date.now();
       console.log(proofWithPublicInputs);
@@ -278,7 +283,8 @@ export default function PassportProof() {
     try {
       // No need to provide the circuit here, as it was already loaded
       // during the proof generation
-      const verified = await verifyProof(proofAndInputs, circuitId!);
+      const vkey = await generateVkey(circuitId!);
+      const verified = await verifyProof(proofAndInputs, circuitId!, vkey);
       if (verified) {
         Alert.alert('Verification result', 'The proof is valid!');
       } else {
